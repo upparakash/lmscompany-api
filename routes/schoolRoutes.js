@@ -31,7 +31,7 @@ router.post("/", protect, upload.single("school_logo"), addSchool);
 // Update school
 router.put("/:id", protect, upload.single("school_logo"), updateSchool);
 
-router.get("/", getSchools);
+router.get("/", protect, getSchools);
 router.get("/:id", protect, getSchool);
 router.delete("/:id", protect, deleteSchool);
 router.post("/login", schoolLogin);

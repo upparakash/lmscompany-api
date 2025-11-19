@@ -224,3 +224,38 @@ exports.studentProfile = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
+
+exports.searchStudents = async (req, res) => {
+  try {
+    const { query, schoolCode } = req.query;
+
+    if (!query || !schoolCode) {
+      return res.status(400).json({
+        success: false,
+        message: "query & schoolCode required"
+      });
+    }
+
+    const search = `%${query}%`;
+
+    const [rows] = await db.query(
+      `SELECT id, fullname, admissionId, contactNumber, email, photo 
+       FROM students 
+       WHERE schoolCode = ?
+       AND (
+            admissionId LIKE ?
+            OR fullname LIKE ?
+            OR contactNumber LIKE ?
+            OR email LIKE ?
+       )`,
+      [schoolCode, search, search, search, search]
+    );
+
+    res.json({ success: true, data: rows });
+
+  } catch (err) {
+    console.error("Search Students Error:", err);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
