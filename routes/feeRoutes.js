@@ -1,14 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const {
-  addFeePayment,
-  getFeesByStudent,
-} = require("../controllers/feeController");
+const feeController = require("../controllers/feeController");
 
-// Add Fee Payment
-router.post("/add", addFeePayment);
+// SUMMARY
+router.get("/summary/:admissionId/:schoolCode", feeController.getSummary);
 
-// Get All Fee Records by Student ID
-router.get("/student/:studentId", getFeesByStudent);
+// HISTORY
+router.get("/history/:admissionId/:schoolCode", feeController.getHistory);
+
+// CREATE FEE MASTER (ONLY IF NOT EXISTS)
+router.post("/master/create", feeController.createFeeMaster);
+
+router.get("/fee-receipt/:admissionId/:schoolCode", feeController.getFeeReceipt);
+
+// ADD PAYMENT
+router.post("/pay", feeController.addPayment);
 
 module.exports = router;
